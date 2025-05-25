@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
-
 public class Comentario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,6 +17,8 @@ public class Comentario {
     @Schema(example = "Bom dia amigos", requiredMode = Schema.RequiredMode.REQUIRED, description = "Conteúdo do comentário")
     @NotBlank
     private String comentario;
+
+    private boolean aprovado;
 
     private LocalDateTime criadoEm;
 

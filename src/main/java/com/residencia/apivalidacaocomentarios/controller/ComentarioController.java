@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
@@ -25,7 +26,13 @@ public class ComentarioController {
     @PostMapping
     public ResponseEntity<ComentarioResponseDTO> criarComentario(@RequestBody @Valid ComentarioRequestDTO dto) {
         ComentarioResponseDTO comentarioSalvo = comentarioService.salvarComentario(dto);
-        return ResponseEntity.created(URI.create("/comentarios/" + comentarioSalvo.id())).body(comentarioSalvo);
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(comentarioSalvo.id())
+                .toUri();
+
+        return ResponseEntity.created(location).body(comentarioSalvo);
     }
 
     @GetMapping

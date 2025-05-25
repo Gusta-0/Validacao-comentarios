@@ -7,5 +7,6 @@ public record ComentarioRequestDTO(
         String nomeUsuario,
 
         @NotBlank(message = "Escreva algo antes de enviar!")
-        String comentario) {
+        String comentario)
+{
 }

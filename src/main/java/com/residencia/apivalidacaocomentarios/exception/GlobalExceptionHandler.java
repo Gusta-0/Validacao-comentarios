@@ -36,5 +36,10 @@ public class GlobalExceptionHandler {
         erro.put("erro", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
     }
+
+    @ExceptionHandler(ComentarioReprovadoException.class)
+    public ResponseEntity<Map<String, String>> handleComentarioReprovado(ComentarioReprovadoException ex) {
+        return ResponseEntity.badRequest().body(Map.of("mensagem", ex.getMessage()));
+    }
 }
 
