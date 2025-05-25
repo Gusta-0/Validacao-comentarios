@@ -1,12 +1,11 @@
 
 # 🗨️ Comentários API
 
-Uma API RESTful desenvolvida com **Spring Boot** para cadastro, listagem e gerenciamento de comentários. O objetivo é permitir que os comentários sejam analisados por um **agente de inteligência artificial**, garantindo que apenas conteúdos apropriados sejam publicados.
+Uma API RESTful desenvolvida com **Spring Boot** para cadastro, listagem e gerenciamento de comentários. Agora integrada com a **IA Gemini da Google**, a API **analisa automaticamente** os comentários para garantir que apenas conteúdos apropriados sejam aceitos.
 
 ---
 
 ## 🔧 Tecnologias Utilizadas
-
 * Java 17+
 * Spring Boot
 * Spring Web
@@ -16,6 +15,7 @@ Uma API RESTful desenvolvida com **Spring Boot** para cadastro, listagem e geren
 * H2 Database (testes)
 * Swagger/OpenAPI
 * Maven
+* **Google Gemini API (moderação de conteúdo)**
 
 ---
 
@@ -23,8 +23,8 @@ Uma API RESTful desenvolvida com **Spring Boot** para cadastro, listagem e geren
 
 A aplicação utiliza dois bancos, conforme o ambiente:
 
-- **Produção:** PostgreSQL
-- **Testes/Desenvolvimento local:** H2 (em memória)
+* **Produção:** PostgreSQL
+* **Testes/Desenvolvimento local:** H2 (em memória)
 
 As configurações estão nos arquivos `application-prod.properties` e `application-test.properties`.
 
@@ -40,25 +40,28 @@ Cria um novo comentário.
 
 ```json
 {
-  "texto": "Este é um comentário de teste"
+  "nomeUsuario": "João",
+  "comentario": "Este é um comentário de teste"
 }
-````
+```
 
 #### 🔹 Resposta de sucesso (`201 Created`)
 
 ```json
 {
   "id": 1,
-  "texto": "Este é um comentário de teste",
-  "criadoEm": "2025-05-08T14:30:00"
+  "comentario": "Este é um comentário de teste",
+  "nomeUsuario": "João",
+  "dataCriacao": "2025-05-24T14:30:00",
+  "aprovado": true
 }
 ```
 
-#### ❗ Resposta de erro - Validação (`400 Bad Request`)
+#### ❗ Resposta de erro - Comentário ofensivo (`400 Bad Request`)
 
 ```json
 {
-  "texto": "O texto do comentário é obrigatório."
+  "erro": "Comentário considerado ofensivo e foi reprovado pela IA."
 }
 ```
 
@@ -66,7 +69,7 @@ Cria um novo comentário.
 
 ### 📄 `GET /comentarios`
 
-Lista todos os comentários cadastrados.
+Lista todos os comentários aprovados.
 
 #### 🔹 Resposta (`200 OK`)
 
@@ -74,8 +77,10 @@ Lista todos os comentários cadastrados.
 [
   {
     "id": 1,
-    "texto": "Este é um comentário de teste",
-    "criadoEm": "2025-05-08T14:30:00"
+    "comentario": "Este é um comentário de teste",
+    "nomeUsuario": "João",
+    "dataCriacao": "2025-05-24T14:30:00",
+    "aprovado": true
   }
 ]
 ```
@@ -91,8 +96,10 @@ Retorna um comentário específico por ID.
 ```json
 {
   "id": 1,
-  "texto": "Este é um comentário de teste",
-  "criadoEm": "2025-05-08T14:30:00"
+  "comentario": "Este é um comentário de teste",
+  "nomeUsuario": "João",
+  "dataCriacao": "2025-05-24T14:30:00",
+  "aprovado": true
 }
 ```
 
@@ -110,21 +117,22 @@ Retorna um comentário específico por ID.
 
 A API conta com um tratamento global de erros, que retorna mensagens claras e padronizadas:
 
-| Erro                          | Status | Exemplo de resposta                                    |
-| ----------------------------- | ------ | ------------------------------------------------------ |
-| Comentário não encontrado     | 404    | `{ "erro": "Comentário não encontrado com o id: 10" }` |
-| Campo texto em branco         | 400    | `{ "texto": "O texto do comentário é obrigatório." }`  |
-| Argumento inválido (genérico) | 400    | `{ "erro": "Texto muito longo" }`                      |
+| Erro                            | Status | Exemplo de resposta                                                      |
+| ------------------------------- | ------ | ------------------------------------------------------------------------ |
+| Comentário não encontrado       | 404    | `{ "erro": "Comentário não encontrado com o id: 10" }`                   |
+| Campo obrigatório ausente       | 400    | `{ "comentario": "O comentário não pode estar em branco." }`             |
+| Comentário ofensivo (IA Gemini) | 400    | `{ "erro": "Comentário considerado ofensivo e foi reprovado pela IA." }` |
 
 ---
 
-## 🤖 Integração com Inteligência Artificial (em desenvolvimento)
+## 🤖 Integração com Inteligência Artificial (ativa)
 
-Está prevista a inclusão de uma camada de **validação automática via IA**:
+A API agora utiliza a **IA Gemini da Google** para **avaliar comentários automaticamente** antes do salvamento:
 
-* Detectar linguagem ofensiva, spam ou conteúdo inapropriado.
-* Rejeitar comentários automaticamente com base em critérios de moderação.
-* Integrar com serviços externos ou modelos de IA próprios.
+* Detecta linguagem ofensiva, spam ou conteúdo inapropriado.
+* Rejeita automaticamente comentários inadequados.
+* Exibe uma mensagem amigável ao usuário em caso de reprovação.
+* Totalmente transparente para o usuário final.
 
 ---
 
@@ -159,6 +167,12 @@ spring.datasource.password=sua_senha
 spring.profiles.active=prod
 ```
 
+> ℹ️ Para usar a IA Gemini, defina sua chave de API:
+
+```properties
+gemini.api.key=SUA_CHAVE_DA_GOOGLE
+```
+
 ---
 
 ## 📚 Documentação Swagger
@@ -176,7 +190,6 @@ Ela permite testar os endpoints de forma interativa.
 ## 🔒 Próximas Funcionalidades
 
 * 🔐 Autenticação e autorização com Spring Security + JWT
-* 🤖 Integração com IA para moderação de conteúdo
 * ✅ Paginação e ordenação de comentários
 * 📁 Upload de imagens com comentários
 
@@ -184,13 +197,12 @@ Ela permite testar os endpoints de forma interativa.
 
 ## 📝 Observações
 
+* Comentários são agora moderados automaticamente pela IA Gemini.
+* O código segue boas práticas com DTOs, validação, camada de service e tratamento global de exceções.
 * Projeto em desenvolvimento ativo.
-* Comentários ofensivos serão futuramente moderados via IA.
-* O código segue boas práticas com DTOs, validação e tratamento de erros centralizado.
 
 ---
 
 ## 📄 Licença
 
 Este projeto está licenciado sob a [Licença MIT](https://opensource.org/licenses/MIT).
-
