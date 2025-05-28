@@ -1,5 +1,6 @@
 package com.residencia.apivalidacaocomentarios.controller;
 
+import org.springframework.web.bind.annotation.RestController;
 import com.residencia.apivalidacaocomentarios.dto.request.ComentarioRequestDTO;
 import com.residencia.apivalidacaocomentarios.dto.response.ComentarioResponseDTO;
 import com.residencia.apivalidacaocomentarios.service.ComentarioService;
