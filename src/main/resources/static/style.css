@@ -1,9 +1,232 @@
+/* Cores da Bandeira de Pernambuco */
+:root {
+  --pernambuco-blue: #000080; /* Azul Marinho (Base) */
+  --pernambuco-white: #FFFFFF;
+  --pernambuco-yellow: #FFFF00; /* Amarelo Vibrante */
+  --pernambuco-green: #008000; /* Verde Escuro */
+  --pernambuco-red: #FF0000; /* Vermelho */
 
-#logo {
-  max-height: 100px;
+  /* Tons mais claros para o design */
+  --pe-light-blue: #e0f2f7; /* Azul bem clarinho para fundo */
+  --pe-medium-blue: #4682B4; /* Azul mais médio para detalhes */
+  --pe-accent-yellow: #FFD700; /* Amarelo dourado */
+  --pe-accent-red: #DC143C; /* Vermelho carmesim */
+  --pe-dark-text: #343a40; /* Cor padrão para texto escuro */
+  --pe-light-text: #6c757d; /* Cor padrão para texto claro */
 }
 
+body {
+  font-family: 'Open Sans', sans-serif;
+  background-color: var(--pe-light-blue); /* Fundo suave com tom de Pernambuco */
+  color: var(--pe-dark-text);
+}
 
-#mensagem {
-  min-height: 40px;
+.header-jornal {
+  background: linear-gradient(to right, var(--pernambuco-blue), var(--pe-medium-blue));
+  padding: 2.5rem 0;
+  border-bottom: 5px solid var(--pe-accent-yellow); /* Detalhe amarelo */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.logo-jornal {
+  max-width: 250px;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.section-title {
+  font-family: 'Merriweather', serif;
+  color: var(--pernambuco-blue);
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 2.5rem;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.section-title::after {
+  content: '';
+  display: block;
+  width: 80px;
+  height: 4px;
+  background-color: var(--pe-accent-red); /* Linha vermelha abaixo do título */
+  margin: 10px auto 0;
+  border-radius: 2px;
+}
+
+.section-title .icon-bubble,
+.section-title .icon-comments {
+  color: var(--pe-accent-yellow); /* Ícones em destaque */
+  margin-right: 15px;
+  font-size: 2.8rem;
+  vertical-align: middle;
+}
+
+/* Formulário de Comentários */
+.form-card {
+  background-color: var(--pernambuco-white);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  padding: 2.5rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.form-label {
+  font-weight: 600;
+  color: var(--pernambuco-blue);
+  margin-bottom: 0.5rem;
+}
+
+.form-control {
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--pe-medium-blue);
+}
+
+.form-control:focus {
+  border-color: var(--pe-accent-yellow);
+  box-shadow: 0 0 0 0.25rem rgba(255, 215, 0, 0.25); /* Amarelo semi-transparente no foco */
+}
+
+.btn-enviar {
+  background-color: var(--pernambuco-green); /* Verde da bandeira */
+  border-color: var(--pernambuco-green);
+  font-size: 1.1rem;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-enviar:hover {
+  background-color: #006400; /* Verde mais escuro no hover */
+  border-color: #006400;
+  transform: translateY(-2px);
+}
+
+.feedback-message {
+  font-weight: 600;
+  margin-top: 1.5rem;
+}
+
+/* Botão de Atualizar Comentários */
+.btn-atualizar {
+  color: var(--pe-medium-blue);
+  border-color: var(--pe-medium-blue);
+  background-color: transparent;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-atualizar:hover {
+  background-color: var(--pe-medium-blue);
+  color: var(--pernambuco-white);
+  border-color: var(--pe-medium-blue);
+  transform: translateY(-2px);
+}
+
+/* Cards de Comentários Aprovados */
+#comentariosAprovados {
+  margin-top: 2rem;
+}
+
+.comment-card {
+  background-color: var(--pernambuco-white);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  position: relative;
+  padding-top: 1.5rem; /* Espaço para o ícone/detalhe */
+  overflow: hidden; /* Para o pseudo-elemento */
+}
+
+.comment-card::before {
+  content: '❝'; /* Aspas decorativas */
+  position: absolute;
+  top: -10px; /* Ajuste para cima */
+  left: 20px;
+  font-size: 4rem;
+  color: var(--pe-accent-yellow); /* Amarelo de destaque */
+  opacity: 0.2;
+  z-index: 0;
+}
+
+.comment-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.comment-card .card-body {
+  position: relative; /* Para z-index do conteúdo */
+  z-index: 1;
+}
+
+.comment-author {
+  font-family: 'Merriweather', serif;
+  font-weight: 700;
+  color: var(--pernambuco-blue); /* Nome do autor em azul */
+  font-size: 1.15rem;
+  margin-bottom: 0.75rem;
+  padding-left: 10px; /* Alinha com as aspas */
+}
+
+.comment-text {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--pe-dark-text);
+  margin-bottom: 1rem;
+  padding-left: 10px; /* Alinha com as aspas */
+}
+
+.comment-date {
+  font-size: 0.85rem;
+  color: var(--pe-light-text);
+  padding-right: 10px;
+}
+
+/* Responsividade Básica */
+@media (max-width: 768px) {
+  .section-title {
+    font-size: 2rem;
+  }
+
+  .section-title .icon-bubble,
+  .section-title .icon-comments {
+    font-size: 2.2rem;
+    margin-right: 10px;
+  }
+
+  .form-card,
+  .comment-card {
+    padding: 1.5rem;
+  }
+
+  .logo-jornal {
+    max-width: 200px;
+  }
+}
+
+@media (max-width: 576px) {
+  .section-title {
+    font-size: 1.8rem;
+  }
+
+  .section-title .icon-bubble,
+  .section-title .icon-comments {
+    font-size: 2rem;
+  }
+
+  .form-card,
+  .comment-card {
+    padding: 1rem;
+  }
+
+  .btn-enviar,
+  .btn-atualizar {
+    font-size: 1rem;
+    padding: 0.6rem 1rem;
+  }
 }

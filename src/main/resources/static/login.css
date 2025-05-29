@@ -1,0 +1,220 @@
+/* Cores da Bandeira de Pernambuco */
+:root {
+    --pernambuco-blue: #000080; /* Azul Marinho (Base) */
+    --pernambuco-white: #FFFFFF;
+    --pernambuco-yellow: #FFFF00; /* Amarelo Vibrante */
+    --pernambuco-green: #008000; /* Verde Escuro */
+    --pernambuco-red: #FF0000; /* Vermelho */
+
+    /* Tons mais claros para o design */
+    --pe-light-blue: #e0f2f7; /* Azul bem clarinho para fundo */
+    --pe-medium-blue: #4682B4; /* Azul mais médio para detalhes */
+    --pe-accent-yellow: #FFD700; /* Amarelo dourado */
+    --pe-accent-red: #DC143C; /* Vermelho carmesim, mais suave que o FF0000 puro */
+    --pe-dark-text: #343a40; /* Cor padrão para texto escuro */
+    --pe-light-text: #6c757d; /* Cor padrão para texto claro */
+}
+
+body {
+    font-family: 'Open Sans', sans-serif; /* Usando a mesma fonte do site principal */
+    background-color: var(--pe-light-blue); /* Fundo suave com tom de Pernambuco */
+    color: var(--pe-dark-text);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px; /* Padding geral para evitar que o conteúdo encoste nas bordas */
+    box-sizing: border-box;
+}
+
+.main-content-wrapper {
+    display: flex;
+    flex-direction: row; /* Padrão desktop: logo ao lado do formulário */
+    align-items: center;
+    gap: 60px; /* Espaço maior entre a logo e o formulário */
+    max-width: 1000px; /* Aumenta a largura máxima para comportar os dois elementos */
+    width: 100%; /* Garante que o wrapper ocupe a largura disponível */
+    padding: 30px;
+    background-color: var(--pernambuco-white); /* Fundo branco para o container principal */
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Sombra mais suave e elegante */
+    border: 1px solid rgba(0, 0, 0, 0.05); /* Borda muito sutil */
+}
+
+.logo-container {
+    flex-shrink: 0;
+    text-align: center;
+    padding: 20px; /* Espaço interno para a logo */
+    background-color: var(--pe-light-blue); /* Fundo sutil para o container da logo */
+    border-radius: 8px;
+    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.05); /* Sombra interna para profundidade */
+}
+
+.login-logo {
+    max-width: 280px; /* Aumenta um pouco o tamanho da logo */
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    border-radius: 8px; /* Mantém as bordas arredondadas */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* Sombra para a imagem da logo */
+}
+
+.login-container {
+    background-color: var(--pernambuco-white); /* Fundo do card de login */
+    border-radius: 12px;
+    /* A sombra principal já está no .main-content-wrapper, então aqui apenas uma sombra sutil */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    padding: 40px;
+    width: 400px; /* Aumenta um pouco a largura do formulário */
+    text-align: center;
+    border: 1px solid var(--pe-medium-blue); /* Borda em azul médio de Pernambuco */
+    flex-shrink: 0;
+}
+
+.form-title {
+    font-family: 'Merriweather', serif; /* Mesma fonte dos títulos principais */
+    color: var(--pernambuco-blue); /* Azul escuro de Pernambuco para o título */
+    margin-bottom: 10px;
+    font-size: 2.2rem; /* Tamanho maior para o título */
+    font-weight: 700;
+}
+
+.form-subtitle {
+    color: var(--pe-light-text);
+    margin-bottom: 30px;
+    font-size: 1rem;
+}
+
+.input-group {
+    margin-bottom: 25px; /* Mais espaçamento entre os grupos de input */
+    text-align: left;
+}
+
+.input-label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--pe-dark-text); /* Cor de texto mais escura para labels */
+    font-weight: 600; /* Um pouco mais negrito */
+    font-size: 1.05rem;
+}
+
+.form-input {
+    width: 100%; /* Usa 100% da largura do pai */
+    padding: 14px 15px; /* Aumenta o padding para inputs maiores */
+    border: 1px solid var(--pe-medium-blue); /* Borda em azul médio */
+    border-radius: 8px; /* Bordas mais arredondadas */
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-input::placeholder {
+    color: var(--pe-light-text); /* Cor do placeholder */
+}
+
+.form-input:focus {
+    border-color: var(--pe-accent-yellow); /* Foco com amarelo vibrante */
+    box-shadow: 0 0 0 0.25rem rgba(255, 215, 0, 0.25); /* Sombra do foco */
+    outline: none;
+}
+
+.btn-pernambuco {
+    background-color: var(--pernambuco-green); /* Botão verde da bandeira */
+    color: var(--pernambuco-white);
+    padding: 16px 30px; /* Padding maior para o botão */
+    border: none;
+    border-radius: 8px; /* Bordas arredondadas */
+    cursor: pointer;
+    font-size: 1.2rem; /* Tamanho maior da fonte */
+    font-weight: 700; /* Mais negrito */
+    width: 100%;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 10px; /* Espaço acima do botão */
+    margin-bottom: 20px; /* Espaço abaixo do botão */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra para o botão */
+}
+
+.btn-pernambuco:hover {
+    background-color: #006400; /* Verde mais escuro no hover */
+    transform: translateY(-2px); /* Efeito de leve elevação */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.forgot-password {
+    margin-top: 15px;
+    font-size: 0.95rem;
+}
+
+.forgot-password a {
+    color: var(--pe-accent-red); /* Link em vermelho de Pernambuco */
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease, text-decoration 0.3s ease;
+}
+
+.forgot-password a:hover {
+    color: var(--pernambuco-red); /* Vermelho puro no hover */
+    text-decoration: underline;
+}
+
+.error-message {
+    color: var(--pernambuco-red); /* Mensagens de erro em vermelho */
+    margin-top: 20px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    background-color: rgba(255, 0, 0, 0.05); /* Fundo suave para a mensagem de erro */
+    border: 1px solid var(--pernambuco-red);
+    padding: 10px;
+    border-radius: 5px;
+    display: none; /* Mantido para ser controlado via JS */
+}
+
+/* Media Query para telas menores (responsividade) */
+@media (max-width: 992px) { /* Ponto de quebra para layout de coluna */
+    .main-content-wrapper {
+        flex-direction: column;
+        gap: 40px; /* Reduz o espaço entre elementos */
+        padding: 20px;
+        box-shadow: none; /* Remove a sombra do wrapper em telas menores */
+        border: none; /* Remove a borda do wrapper em telas menores */
+        background-color: transparent; /* Fundo transparente para o wrapper */
+    }
+
+    .logo-container {
+        padding: 0; /* Remove padding */
+        background-color: transparent; /* Remove fundo */
+        box-shadow: none; /* Remove sombra interna */
+    }
+
+    .login-logo {
+        max-width: 220px; /* Reduz o tamanho da logo */
+    }
+
+    .login-container {
+        width: 100%;
+        max-width: 380px; /* Controla a largura máxima em telas menores */
+        padding: 30px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); /* Sombra mais pronunciada no card de login */
+    }
+
+    .form-title {
+        font-size: 2rem;
+    }
+
+    .btn-pernambuco {
+        padding: 14px 25px;
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    body {
+        padding: 15px;
+    }
+    .login-container {
+        padding: 25px;
+    }
+    .form-title {
+        font-size: 1.8rem;
+    }
+}

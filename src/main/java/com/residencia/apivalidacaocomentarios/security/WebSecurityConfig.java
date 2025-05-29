@@ -55,8 +55,10 @@ public class WebSecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/api/auth/**").permitAll()
-                                .anyRequest().authenticated() // Todas as outras rotas requerem autenticação
+                                auth.anyRequest().permitAll()
+//                        auth.requestMatchers("/login/**").permitAll()
+//                            .requestMatchers("/test/**").permitAll() // Permite acesso público a rotas de teste
+//                                .anyRequest().authenticated() // Todas as outras rotas requerem autenticação
                 );
 
         http.authenticationProvider(authenticationProvider());

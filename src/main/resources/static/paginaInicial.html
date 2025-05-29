@@ -2,59 +2,79 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Comentários</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comentários - Jornal Notícias PE</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body class="bg-light">
 
-  
-  <div class="text-center my-4">
-    <img src="img/logo%20jornal%201.jpg" alt="Logo do Projeto" class="img-fluid" id="logo">
-  </div>
+<header class="text-center py-4 header-jornal">
+  <img src="img/logo%20jornal%201.jpg" alt="Logo do Jornal Notícias PE" class="img-fluid logo-jornal" id="logo">
+  <h1 class="visually-hidden">Comentários do Jornal Notícias PE</h1>
+</header>
 
-  <div class="container mt-3">
-    <h1 class="mb-4">🗨️ Comentários</h1>
+<main class="container my-5">
+  <section class="mb-5">
+    <h2 class="section-title text-center mb-4">
+      <span class="icon-bubble">💬</span> Deixe sua Opinião
+    </h2>
 
-    
-    <div class="card mb-4">
+    <div class="card shadow-sm form-card">
       <div class="card-body">
-        <h5 class="card-title">Novo Comentário</h5>
+        <p class="card-text text-center text-muted mb-4">Seu comentário é importante para nós e será moderado por nossa inteligência artificial para garantir um ambiente saudável.</p>
         <form id="comentarioForm">
           <div class="mb-3">
-            <label for="nomeUsuario" class="form-label">Nome</label>
-            <input type="text" class="form-control" id="nomeUsuario" required>
+            <label for="nomeUsuario" class="form-label">Seu Nome:</label>
+            <input type="text" class="form-control" id="nomeUsuario" placeholder="Digite seu nome" required>
           </div>
-          <div class="mb-3">
-            <label for="comentario" class="form-label">Comentário</label>
-            <textarea class="form-control" id="comentario" rows="3" required></textarea>
+          <div class="mb-4">
+            <label for="comentario" class="form-label">Sua Mensagem:</label>
+            <textarea class="form-control" id="comentario" rows="4" placeholder="Escreva seu comentário aqui..." required></textarea>
           </div>
-          <button type="submit" class="btn btn-primary">Enviar</button>
+          <div class="d-grid">
+            <button type="submit" class="btn btn-primary btn-enviar">Publicar Comentário</button>
+          </div>
+          <div id="mensagem" class="mt-3 text-center feedback-message"></div>
         </form>
-        <div id="mensagem" class="mt-3"></div>
       </div>
     </div>
+  </section>
 
-   
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">Comentários Aprovados</h5>
-        <button class="btn btn-outline-secondary mb-3" onclick="carregarComentarios()">🔄 Atualizar Lista</button>
-        <table class="table table-striped" id="tabelaComentarios">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nome</th>
-              <th>Comentário</th>
-              <th>Data</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
+  <section>
+    <h2 class="section-title text-center mb-4">
+      <span class="icon-comments">🌟</span> Comentários da Comunidade
+    </h2>
+    <p class="text-center text-muted mb-4">
+      Leia o que nossos leitores estão dizendo. Todos os comentários abaixo foram aprovados por nossa IA.
+    </p>
+
+    <div class="d-flex justify-content-center mb-4">
+      <button class="btn btn-outline-secondary btn-atualizar" onclick="carregarComentarios()">
+        <span class="me-2">🔄</span> Atualizar Comentários
+      </button>
     </div>
-  </div>
 
-  <script src="script.js"></script>
+    <div id="comentariosAprovados" class="row row-cols-1 row-cols-md-2 g-4">
+    </div>
+
+    <table class="d-none" id="tabelaComentarios">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Comentário</th>
+        <th>Data</th>
+      </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+  </section>
+</main>
+
+<script src="script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

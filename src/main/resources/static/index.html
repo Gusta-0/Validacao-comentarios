@@ -3,25 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Personalizado</title>
+    <title>Login - Jornal Notícias PE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="login.css">
 </head>
-<body>
-<div class="main-content-wrapper"> <div class="logo-container">
-    <img src="img/logo%20jornal%201.jpg" alt="Sua Logo" class="login-logo">
-</div>
-    <div class="login-container">
+<body class="bg-login">
+<div class="main-content-wrapper">
+    <div class="logo-container">
+        <img src="img/logo%20jornal%201.jpg" alt="Logo do Jornal Notícias PE" class="login-logo">
+    </div>
+    <div class="login-container card-shadow">
         <form class="login-form">
-            <h2>Bem-vindo(a)!</h2>
+            <h2 class="form-title">Faça seu Login!</h2>
+            <p class="form-subtitle">Acesse sua conta para interagir e acompanhar as notícias.</p>
             <div class="input-group">
-                <label for="username">Usuário:</label>
-                <input type="text" id="username" name="username" required>
+                <label for="username" class="input-label">Usuário:</label>
+                <input type="text" id="username" name="username" placeholder="Digite seu nome de usuário" required class="form-input">
             </div>
             <div class="input-group">
-                <label for="password">Senha:</label>
-                <input type="password" id="password" name="password" required>
+                <label for="password" class="input-label">Senha:</label>
+                <input type="password" id="password" name="password" placeholder="Digite sua senha" required class="form-input">
             </div>
-            <button type="submit" class="login-button">Entrar</button>
+            <button type="submit" class="login-button btn-pernambuco">Entrar</button>
             <p class="forgot-password">
                 <a href="URL_DA_SUA_PAGINA_DE_RECUPERACAO" target="_blank">Esqueceu a senha?</a>
             </p>
@@ -29,7 +32,6 @@
         </form>
     </div>
 </div>
-
 <script src="login.js"></script>
 </body>
 </html>
