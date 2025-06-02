@@ -24,7 +24,8 @@ public class ComentarioController {
         this.comentarioService = comentarioService;
     }
 
-    @PostMapping
+
+    @PostMapping(produces = "application/json; charset=UTF-8")
     public ResponseEntity<ComentarioResponseDTO> criarComentario(@RequestBody @Valid ComentarioRequestDTO dto) {
         ComentarioResponseDTO comentarioSalvo = comentarioService.salvarComentario(dto);
         URI location = ServletUriComponentsBuilder

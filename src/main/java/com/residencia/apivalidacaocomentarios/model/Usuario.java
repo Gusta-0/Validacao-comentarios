@@ -1,7 +1,10 @@
 package com.residencia.apivalidacaocomentarios.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,7 +22,9 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "O nome do usuário não pode ser nulo")
+    @NotBlank(message = "O nome do usuário não pode estar em branco")
+    @Size(min = 3, max = 100, message = "O nome do usuário deve ter entre {min} e {max} caracteres")
+    @Pattern(regexp = "^[A-Za-zÀ-ÿ\\s]+$", message = "O nome do usuário deve conter apenas letras e espaços")
     @Column(name = "nome_usuario", nullable = false)
     private String nomeUsuario;
 

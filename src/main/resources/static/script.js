@@ -1,5 +1,37 @@
 const API_COMENTARIOS_URL = "http://localhost:8080/comentarios";
 
+// 🟢 Trava de tecla inválida
+function bloquearTeclasInvalidas(event) {
+    const tecla = event.key;
+    const teclaValida =
+        /^[A-Za-zÀ-ÿ\s]$/.test(tecla) || // letras e espaço
+        ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(tecla); // controle
+
+    if (!teclaValida) {
+        event.preventDefault();
+    }
+}
+
+// 🟢 Filtro ao digitar/colar
+function filtrarCaracteresPermitidos(input) {
+    input.value = input.value.replace(/[^A-Za-zÀ-ÿ\s]/g, '');
+}
+
+// 🟢 Aplica eventos ao carregar a página
+document.addEventListener("DOMContentLoaded", () => {
+    const nomeInput = document.getElementById("nomeUsuario");
+
+    if (nomeInput) {
+        nomeInput.addEventListener("keydown", bloquearTeclasInvalidas);
+        nomeInput.addEventListener("input", function () {
+            filtrarCaracteresPermitidos(this);
+        });
+    }
+
+    carregarComentarios();
+});
+
+// 🟡 Envio do formulário
 document.getElementById("comentarioForm").addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -15,32 +47,35 @@ document.getElementById("comentarioForm").addEventListener("submit", async (e) =
 
     try {
         document.getElementById("mensagem").innerHTML = `
-            <div class="alert alert-info">Enviando comentário para validação e salvamento...</div>
+            <div class="alert alert-info">Verificando...</div>
         `;
 
-        // Requisição POST para enviar um novo comentário
-        // Aqui, as credenciais precisam ser incluídas SE o endpoint de POST também for protegido.
-        // Se o endpoint de POST for público (permitAll), então credentials: 'include' não é estritamente necessário para o POST,
-        // mas não faz mal deixá-lo para consistência ou se ele também exigir sessão.
         const response = await fetch(API_COMENTARIOS_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ nomeUsuario, comentario: comentarioTexto }),
-            credentials: 'include' // <<< ADICIONE AQUI TAMBÉM SE SEU POST FOR PROTEGIDO!
+            credentials: 'include'
         });
 
         if (!response.ok) {
-            const erroMensagem = await response.text();
-            throw new Error(erroMensagem || "Erro ao enviar comentário.");
+            const responseBody = await response.text();
+            let erroMensagem = "Erro ao enviar comentário.";
+            try {
+                const erroJson = JSON.parse(responseBody);
+                erroMensagem = erroJson.mensagem || erroJson.erro || erroMensagem;
+            } catch {
+                if (responseBody) erroMensagem = responseBody;
+            }
+            throw new Error(erroMensagem);
         }
 
         const data = await response.json();
         document.getElementById("mensagem").innerHTML = `
-            <div class="alert alert-success">Comentário enviado com sucesso! ID: ${data.id}</div>
+            <div class="alert alert-success">Comentário enviado com sucesso!</div>
         `;
         document.getElementById("nomeUsuario").value = '';
         document.getElementById("comentario").value = '';
-        carregarComentarios(); // Recarrega os comentários após o envio
+        carregarComentarios();
     } catch (error) {
         document.getElementById("mensagem").innerHTML = `
             <div class="alert alert-danger">Erro: ${error.message}</div>
@@ -49,25 +84,22 @@ document.getElementById("comentarioForm").addEventListener("submit", async (e) =
     }
 });
 
-
 async function carregarComentarios() {
     try {
-        // >>>>> AQUI É ONDE VOCÊ PRECISA ADICIONAR credentials: 'include' <<<<<
         const response = await fetch(API_COMENTARIOS_URL, {
-            method: 'GET', // Método padrão para fetch é GET, mas é bom ser explícito
-            credentials: 'include' // ESSENCIAL para enviar o cookie de sessão!
+            method: 'GET',
+            credentials: 'include'
         });
 
         if (!response.ok) {
-            // Se o login foi bem-sucedido mas a sessão expirou ou houve logout,
-            // ou se o usuário não está autenticado e tenta acessar diretamente
             if (response.status === 401 || response.status === 403) {
                 console.error("Não autorizado ou proibido ao carregar comentários. Redirecionando para login.");
-                window.location.href = 'login.html'; // Redireciona para a página de login
-                return; // Impede a continuação da função
+                window.location.href = 'login.html';
+                return;
             }
             throw new Error(`Erro ao carregar comentários: ${response.status} ${response.statusText}`);
         }
+
         const comentarios = await response.json();
 
         const comentariosContainer = document.getElementById('comentariosAprovados');
@@ -133,9 +165,8 @@ async function carregarComentarios() {
             comentariosContainer.appendChild(colDiv);
         });
 
-        // Opcional: Ainda preenche a tabela oculta se houver alguma lógica que dependa disso
         const tabela = document.querySelector("#tabelaComentarios tbody");
-        if (tabela) { // Verifica se a tabela existe
+        if (tabela) {
             tabela.innerHTML = comentarios.map(comentario => {
                 const dataFormatadaTabela = comentario.criadoEm
                     ? new Date(
@@ -159,7 +190,6 @@ async function carregarComentarios() {
             }).join("");
         }
 
-
     } catch (error) {
         console.error("Erro ao carregar comentários:", error);
         document.getElementById("mensagem").innerHTML = `
@@ -167,8 +197,3 @@ async function carregarComentarios() {
         `;
     }
 }
-
-// Carrega os comentários ao iniciar a página (se a página atual for aquela que exibe os comentários e exige login)
-// Se você está redirecionando do login.html para outra página (ex: dashboard.html)
-// que tem essa função carregarComentarios, esta linha está correta para essa nova página.
-document.addEventListener('DOMContentLoaded', carregarComentarios);

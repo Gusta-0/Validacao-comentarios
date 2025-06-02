@@ -12,6 +12,14 @@ import java.util.Map;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(ComentarioReprovadoException.class)
+    public ResponseEntity<String> handleComentarioReprovado(ComentarioReprovadoException ex) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .header("Content-Type", "application/json; charset=UTF-8")
+                .body("{\"mensagem\":\"" + ex.getMessage() + "\"}");
+    }
+
     //Quando o service lançar essa exceção, a resposta será um 404 Not Found com a mensagem.
     @ExceptionHandler(ComentarioNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleNotFound(ComentarioNotFoundException ex) {
@@ -37,9 +45,5 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
     }
 
-    @ExceptionHandler(ComentarioReprovadoException.class)
-    public ResponseEntity<Map<String, String>> handleComentarioReprovado(ComentarioReprovadoException ex) {
-        return ResponseEntity.badRequest().body(Map.of("mensagem", ex.getMessage()));
-    }
 }
 

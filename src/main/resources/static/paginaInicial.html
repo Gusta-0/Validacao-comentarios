@@ -27,8 +27,22 @@
         <form id="comentarioForm">
           <div class="mb-3">
             <label for="nomeUsuario" class="form-label">Seu Nome:</label>
-            <input type="text" class="form-control" id="nomeUsuario" placeholder="Digite seu nome" required>
+            <input
+                    type="text"
+                    class="form-control"
+                    id="nomeUsuario"
+                    name="nomeUsuario"
+                    placeholder="Digite seu nome"
+                    required
+                    minlength="2"
+                    maxlength="100"
+                    pattern="^[A-Za-zÀ-ÿ\\s]+$"
+                    title="O nome deve conter apenas letras e espaços, entre 2 e 100 caracteres."
+                    oninput="filtrarCaracteresPermitidos(this)"
+                    onkeydown="bloquearTeclasInvalidas(event)"
+            >
           </div>
+
           <div class="mb-4">
             <label for="comentario" class="form-label">Sua Mensagem:</label>
             <textarea class="form-control" id="comentario" rows="4" placeholder="Escreva seu comentário aqui..." required></textarea>
