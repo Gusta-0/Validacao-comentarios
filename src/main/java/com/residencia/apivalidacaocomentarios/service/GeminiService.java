@@ -49,9 +49,9 @@ public class GeminiService {
             List<Map<String, String>> parts = (List<Map<String, String>>) content.get("parts");
             String output = parts.get(0).get("text");
 
-            return output.toLowerCase().contains("não"); // se não for ofensivo, aprova
+            return output.toLowerCase().contains("não");
         } catch (Exception e) {
-            e.printStackTrace(); // <-- MUITO importante para ver no console o que quebrou
+            e.printStackTrace();
             return false;
         }
     }

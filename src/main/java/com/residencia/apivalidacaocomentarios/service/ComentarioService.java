@@ -36,13 +36,11 @@ public class ComentarioService {
         usuario.setNomeUsuario(dto.nomeUsuario());
         usuarioRepository.save(usuario);
 
-        // Valida comentário via IA Gemini
         boolean aprovado = geminiService.avaliarComentario(dto.comentario());
         if (!aprovado) {
-            throw new ComentarioReprovadoException("Comentário considerado ofensivo e foi reprovado pela IA.");
+            throw new ComentarioReprovadoException("Comentário considerado ofensivo ou inapropriado !");
         }
 
-        // Cria comentário associado ao usuário
         Comentario comentario = new Comentario();
         comentario.setComentario(dto.comentario());
         comentario.setUsuario(usuario);
@@ -97,5 +95,3 @@ public class ComentarioService {
         );
     }
 }
-
-//service e controller

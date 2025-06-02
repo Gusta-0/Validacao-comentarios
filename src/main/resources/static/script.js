@@ -1,4 +1,3 @@
-
 const API_COMENTARIOS_URL = "http://localhost:8080/comentarios";
 
 document.getElementById("comentarioForm").addEventListener("submit", async (e) => {
@@ -19,15 +18,19 @@ document.getElementById("comentarioForm").addEventListener("submit", async (e) =
             <div class="alert alert-info">Enviando comentário para validação e salvamento...</div>
         `;
 
+        // Requisição POST para enviar um novo comentário
+        // Aqui, as credenciais precisam ser incluídas SE o endpoint de POST também for protegido.
+        // Se o endpoint de POST for público (permitAll), então credentials: 'include' não é estritamente necessário para o POST,
+        // mas não faz mal deixá-lo para consistência ou se ele também exigir sessão.
         const response = await fetch(API_COMENTARIOS_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ nomeUsuario, comentario: comentarioTexto })
+            body: JSON.stringify({ nomeUsuario, comentario: comentarioTexto }),
+            credentials: 'include' // <<< ADICIONE AQUI TAMBÉM SE SEU POST FOR PROTEGIDO!
         });
 
         if (!response.ok) {
-            // Se o backend retornou um erro (ex: 400 por comentário ofensivo)
-            const erroMensagem = await response.text(); // Assume que o ControllerAdvice retorna texto puro
+            const erroMensagem = await response.text();
             throw new Error(erroMensagem || "Erro ao enviar comentário.");
         }
 
@@ -49,15 +52,26 @@ document.getElementById("comentarioForm").addEventListener("submit", async (e) =
 
 async function carregarComentarios() {
     try {
-        const response = await fetch(API_COMENTARIOS_URL);
+        // >>>>> AQUI É ONDE VOCÊ PRECISA ADICIONAR credentials: 'include' <<<<<
+        const response = await fetch(API_COMENTARIOS_URL, {
+            method: 'GET', // Método padrão para fetch é GET, mas é bom ser explícito
+            credentials: 'include' // ESSENCIAL para enviar o cookie de sessão!
+        });
+
         if (!response.ok) {
-            throw new Error(`Erro ao carregar comentários: ${response.statusText}`);
+            // Se o login foi bem-sucedido mas a sessão expirou ou houve logout,
+            // ou se o usuário não está autenticado e tenta acessar diretamente
+            if (response.status === 401 || response.status === 403) {
+                console.error("Não autorizado ou proibido ao carregar comentários. Redirecionando para login.");
+                window.location.href = 'login.html'; // Redireciona para a página de login
+                return; // Impede a continuação da função
+            }
+            throw new Error(`Erro ao carregar comentários: ${response.status} ${response.statusText}`);
         }
         const comentarios = await response.json();
 
-        // ** ALTERAÇÃO AQUI: Em vez de preencher uma tabela, preenche a div de cards **
         const comentariosContainer = document.getElementById('comentariosAprovados');
-        comentariosContainer.innerHTML = ''; // Limpa os comentários existentes
+        comentariosContainer.innerHTML = '';
 
         if (comentarios.length === 0) {
             comentariosContainer.innerHTML = `
@@ -72,12 +86,12 @@ async function carregarComentarios() {
             const dataFormatada = comentario.criadoEm
                 ? new Date(
                     comentario.criadoEm[0],
-                    comentario.criadoEm[1] - 1, // Mês é 0-indexed em JavaScript
+                    comentario.criadoEm[1] - 1,
                     comentario.criadoEm[2],
                     comentario.criadoEm[3],
                     comentario.criadoEm[4],
                     comentario.criadoEm[5]
-                ).toLocaleString('pt-BR', { // Formata para o padrão brasileiro
+                ).toLocaleString('pt-BR', {
                     day: '2-digit',
                     month: '2-digit',
                     year: 'numeric',
@@ -87,7 +101,7 @@ async function carregarComentarios() {
                 : "Data não disponível";
 
             const colDiv = document.createElement('div');
-            colDiv.className = 'col'; // Classe para o sistema de grid do Bootstrap
+            colDiv.className = 'col';
 
             const cardDiv = document.createElement('div');
             cardDiv.className = 'card comment-card h-100 shadow-sm';
@@ -96,7 +110,7 @@ async function carregarComentarios() {
             cardBodyDiv.className = 'card-body';
 
             const authorEl = document.createElement('h5');
-            authorEl.className = 'card-subtitle mb-2 comment-author'; // Removido 'text-muted' pois já estilizado no CSS
+            authorEl.className = 'card-subtitle mb-2 comment-author';
             authorEl.textContent = comentario.nomeUsuario;
 
             const textEl = document.createElement('p');
@@ -119,30 +133,31 @@ async function carregarComentarios() {
             comentariosContainer.appendChild(colDiv);
         });
 
-        // Opcional: Ainda preenche a tabela oculta se houver alguma lógica que dependa disso,
-        // mas o usuário final não a verá.
+        // Opcional: Ainda preenche a tabela oculta se houver alguma lógica que dependa disso
         const tabela = document.querySelector("#tabelaComentarios tbody");
-        tabela.innerHTML = comentarios.map(comentario => {
-            const dataFormatadaTabela = comentario.criadoEm
-                ? new Date(
-                    comentario.criadoEm[0],
-                    comentario.criadoEm[1] - 1,
-                    comentario.criadoEm[2],
-                    comentario.criadoEm[3],
-                    comentario.criadoEm[4],
-                    comentario.criadoEm[5]
-                ).toLocaleString()
-                : "Data não disponível";
+        if (tabela) { // Verifica se a tabela existe
+            tabela.innerHTML = comentarios.map(comentario => {
+                const dataFormatadaTabela = comentario.criadoEm
+                    ? new Date(
+                        comentario.criadoEm[0],
+                        comentario.criadoEm[1] - 1,
+                        comentario.criadoEm[2],
+                        comentario.criadoEm[3],
+                        comentario.criadoEm[4],
+                        comentario.criadoEm[5]
+                    ).toLocaleString()
+                    : "Data não disponível";
 
-            return `
-                <tr>
-                    <td>${comentario.id}</td>
-                    <td>${comentario.nomeUsuario}</td>
-                    <td>${comentario.comentario}</td>
-                    <td>${dataFormatadaTabela}</td>
-                </tr>
-            `;
-        }).join("");
+                return `
+                    <tr>
+                        <td>${comentario.id}</td>
+                        <td>${comentario.nomeUsuario}</td>
+                        <td>${comentario.comentario}</td>
+                        <td>${dataFormatadaTabela}</td>
+                    </tr>
+                `;
+            }).join("");
+        }
 
 
     } catch (error) {
@@ -153,161 +168,7 @@ async function carregarComentarios() {
     }
 }
 
-// Carrega os comentários ao iniciar a página
+// Carrega os comentários ao iniciar a página (se a página atual for aquela que exibe os comentários e exige login)
+// Se você está redirecionando do login.html para outra página (ex: dashboard.html)
+// que tem essa função carregarComentarios, esta linha está correta para essa nova página.
 document.addEventListener('DOMContentLoaded', carregarComentarios);
-
-/*
-const API_COMENTARIOS_URL = "http://localhost:8080/comentarios";
-
-
-
-document.getElementById("comentarioForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const nomeUsuario = document.getElementById("nomeUsuario").value;
-    const comentarioTexto = document.getElementById("comentario").value;
-
-    if (!comentarioTexto.trim()) {
-        document.getElementById("mensagem").innerHTML = `
-            <div class="alert alert-warning">Por favor, digite um comentário.</div>
-        `;
-        return;
-    }
-
-    try {
-        document.getElementById("mensagem").innerHTML = `
-            <div class="alert alert-info">Enviando comentário para validação e salvamento...</div>
-        `;
-
-        const response = await fetch(API_COMENTARIOS_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ nomeUsuario, comentario: comentarioTexto })
-        });
-
-        if (!response.ok) {
-            // Se o backend retornou um erro (ex: 400 por comentário ofensivo)
-            const erroMensagem = await response.text(); // Assume que o ControllerAdvice retorna texto puro
-            throw new Error(erroMensagem || "Erro ao enviar comentário.");
-        }
-
-        const data = await response.json();
-        document.getElementById("mensagem").innerHTML = `
-            <div class="alert alert-success">Comentário enviado com sucesso! ID: ${data.id}</div>
-        `;
-        document.getElementById("nomeUsuario").value = '';
-        document.getElementById("comentario").value = '';
-        carregarComentarios();
-    } catch (error) {
-        document.getElementById("mensagem").innerHTML = `
-            <div class="alert alert-danger">Erro: ${error.message}</div>
-        `;
-        console.error("Erro completo:", error);
-    }
-});
-
-// A função carregarComentarios() permanece a mesma
-async function carregarComentarios() {
-    try {
-        const response = await fetch(API_COMENTARIOS_URL);
-        if (!response.ok) {
-            throw new Error(`Erro ao carregar comentários: ${response.statusText}`);
-        }
-        const comentarios = await response.json();
-
-        const tabela = document.querySelector("#tabelaComentarios tbody");
-        tabela.innerHTML = comentarios.map(comentario => {
-            const dataFormatada = comentario.criadoEm
-                ? new Date(
-                    comentario.criadoEm[0],
-                    comentario.criadoEm[1] - 1,
-                    comentario.criadoEm[2],
-                    comentario.criadoEm[3],
-                    comentario.criadoEm[4],
-                    comentario.criadoEm[5]
-                ).toLocaleString()
-                : "Data não disponível";
-
-            return `
-                <tr>
-                    <td>${comentario.id}</td>
-                    <td>${comentario.nomeUsuario}</td>
-                    <td>${comentario.comentario}</td>
-                    <td>${dataFormatada}</td>
-                </tr>
-            `;
-        }).join("");
-    } catch (error) {
-        console.error("Erro ao carregar comentários:", error);
-        document.getElementById("mensagem").innerHTML = `
-            <div class="alert alert-danger">Erro ao carregar comentários: ${error.message}</div>
-        `;
-    }
-}
-
-carregarComentarios();
-
-
-
-//
-//
-//document.getElementById("comentarioForm").addEventListener("submit", async (e) => {
-//    e.preventDefault();
-//    
-//    const nomeUsuario = document.getElementById("nomeUsuario").value;
-//    const comentario = document.getElementById("comentario").value;
-//    
-//    try {
-//        const response = await fetch(API_URL, {
-//            method: "POST",
-//            headers: { "Content-Type": "application/json" },
-//            body: JSON.stringify({ nomeUsuario, comentario })
-//        });
-//
-//        if (!response.ok) {
-//            const erro = await response.json();
-//            throw new Error(erro.erro || "Erro ao enviar comentário");
-//        }
-//
-//        const data = await response.json();
-//        document.getElementById("mensagem").innerHTML = `
-//            <div class="alert alert-success">Comentário enviado com sucesso! ID: ${data.id}</div>
-//        `;
-//        carregarComentarios();
-//    } catch (error) {
-//        document.getElementById("mensagem").innerHTML = `
-//            <div class="alert alert-danger">${error.message}</div>
-//        `;
-//    }
-//});
-//
-//async function carregarComentarios() {
-//    try {
-//        const response = await fetch(API_URL);
-//        const comentarios = await response.json();
-//
-//        console.log("Dados recebidos:", comentarios); 
-//
-//        const tabela = document.querySelector("#tabelaComentarios tbody");
-//        tabela.innerHTML = comentarios.map(comentario => {
-//
-//            const dataFormatada = comentario.criadoEm 
-//                ? new Date(...comentario.criadoEm.slice(0, 6)).toLocaleString()
-//                : "Data não disponível";
-//
-//            return `
-//                <tr>
-//                    <td>${comentario.id}</td>
-//                    <td>${comentario.nomeUsuario}</td>
-//                    <td>${comentario.comentario}</td>
-//                    <td>${dataFormatada}</td>
-//                </tr>
-//            `;
-//        }).join("");
-//    } catch (error) {
-//        console.error("Erro ao carregar comentários:", error);
-//    }
-//}
-//
-//
-//// carregarComentarios(); */

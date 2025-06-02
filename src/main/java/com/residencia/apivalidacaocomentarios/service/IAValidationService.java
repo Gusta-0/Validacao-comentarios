@@ -40,7 +40,7 @@ public class IAValidationService {
             return resposta.toLowerCase().contains("não"); // Se não for ofensivo, está aprovado
         } catch (Exception e) {
             e.printStackTrace();
-            return false; // Se erro, reprova por segurança
+            return false;
         }
     }
 }

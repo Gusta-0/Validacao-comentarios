@@ -31,18 +31,14 @@ public class Usuario {
     @Column(name = "role")
     private Set<String> roles = new HashSet<>();
 
-
-
     public Usuario() {
     }
 
-    // Construtor com dois parâmetros que falta
     public Usuario(Long id, String nomeUsuario) {
         this.id = id;
         this.nomeUsuario = nomeUsuario;
     }
 
-    // Construtor com três parâmetros (já existe)
     public Usuario(Long id, String nomeUsuario, List<Comentario> comentarios) {
         this.id = id;
         this.nomeUsuario = nomeUsuario;
