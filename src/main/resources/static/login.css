@@ -21,8 +21,8 @@ body {
     align-items: center;
     min-height: 100vh;
     margin: 0;
-    padding: 20px;
-    box-sizing: border-box;
+    padding: 20px; /* Adicionado padding para garantir espaçamento em telas muito pequenas */
+    box-sizing: border-box; /* Garante que padding e border sejam incluídos na largura total */
 }
 
 .main-content-wrapper {
@@ -31,7 +31,7 @@ body {
     align-items: center;
     gap: 60px;
     max-width: 1000px;
-    width: 100%;
+    width: 100%; /* Torna o wrapper flexível */
     padding: 30px;
     background-color: var(--pernambuco-white);
     border-radius: 12px;
@@ -62,16 +62,25 @@ body {
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     padding: 40px;
-    width: 400px;
+    /* CORREÇÃO CHAVE: Usar max-width e width: 100% para flexibilidade */
+    max-width: 400px;
+    width: 100%;
     text-align: center;
     border: 1px solid var(--pe-medium-blue);
-    flex-shrink: 0;
+    flex-shrink: 0; /* Impede que o container encolha demais */
+
+    /* Adicionado: Para organizar os elementos internos verticalmente com flexbox */
+    display: flex;
+    flex-direction: column;
+    /* gap: 20px; */ /* Pode ser usado para espaçamento entre filhos se preferir,
+                       mas o margin-bottom nos elementos individuais é geralmente mais controlável. */
+    justify-content: center; /* Centraliza verticalmente o conteúdo */
 }
 
 .form-title {
     font-family: 'Merriweather', serif;
     color: var(--pernambuco-blue);
-    margin-bottom: 10px;
+    margin-bottom: 15px; /* Aumentado ligeiramente para melhor espaçamento inicial */
     font-size: 2.2rem;
     font-weight: 700;
 }
@@ -83,13 +92,15 @@ body {
 }
 
 .input-group {
+    /* Aumentei o margin-bottom para mais espaço entre os grupos de input */
     margin-bottom: 25px;
     text-align: left;
 }
 
 .input-label {
     display: block;
-    margin-bottom: 8px;
+    /* Aumentei o margin-bottom para mais espaço entre o label e o input */
+    margin-bottom: 10px;
     color: var(--pe-dark-text);
     font-weight: 600;
     font-size: 1.05rem;
@@ -102,6 +113,7 @@ body {
     border-radius: 8px;
     font-size: 1rem;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    box-sizing: border-box; /* Garante que padding e border sejam incluídos na largura total */
 }
 
 .form-input::placeholder {
@@ -125,9 +137,11 @@ body {
     font-weight: 700;
     width: 100%;
     transition: background-color 0.3s ease, transform 0.2s ease;
-    margin-top: 10px;
+    /* Aumentei o margin-top para mais espaço antes do botão */
+    margin-top: 30px;
     margin-bottom: 20px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box; /* Garante que padding e border sejam incluídos na largura total */
 }
 
 .btn-pernambuco:hover {
@@ -137,7 +151,8 @@ body {
 }
 
 .forgot-password {
-    margin-top: 15px;
+    /* Aumentei o margin-top para mais espaço após o botão */
+    margin-top: 20px;
     font-size: 0.95rem;
 }
 
@@ -153,26 +168,54 @@ body {
     text-decoration: underline;
 }
 
+/* Estilo para a mensagem de validação do input, como na imagem */
+.validation-message {
+    display: flex; /* Usar flexbox para alinhar ícone e texto */
+    align-items: center; /* Alinhar verticalmente */
+    color: var(--pernambuco-red);
+    margin-top: 8px; /* Espaço entre o input e a mensagem de erro */
+    font-size: 0.85rem;
+    background-color: rgba(255, 0, 0, 0.05);
+    border: 1px solid var(--pernambuco-red);
+    padding: 8px 12px;
+    border-radius: 5px;
+    text-align: left;
+    box-sizing: border-box; /* Garante que padding e border sejam incluídos na largura total */
+}
+
+.validation-message::before {
+    content: '⚠️'; /* Ícone de aviso (pode ser um SVG ou outra fonte de ícones) */
+    margin-right: 8px;
+    font-size: 1em; /* Ajuste o tamanho do ícone */
+}
+
+/* REMOVIDO: .error-message duplicado, se usar validation-message para erros de input */
+/* Se error-message for para erros gerais do formulário, manter e ajustar: */
 .error-message {
     color: var(--pernambuco-red);
-    margin-top: 20px;
+    margin-top: 25px; /* Espaço acima da mensagem de erro geral */
     font-size: 0.95rem;
     font-weight: 600;
     background-color: rgba(255, 0, 0, 0.05);
     border: 1px solid var(--pernambuco-red);
     padding: 10px;
     border-radius: 5px;
-    display: none;
+    display: block; /* Garante que ocupe sua própria linha */
+    text-align: left;
+    box-sizing: border-box;
 }
+
+
+/* Media Queries para Responsividade */
 
 @media (max-width: 992px) {
     .main-content-wrapper {
-        flex-direction: column;
-        gap: 40px;
+        flex-direction: column; /* Altera para coluna em telas menores */
+        gap: 40px; /* Espaçamento entre logo e formulário */
         padding: 20px;
-        box-shadow: none;
-        border: none;
-        background-color: transparent;
+        box-shadow: none; /* Remover sombra para um visual mais limpo em telas menores */
+        border: none; /* Remover borda */
+        background-color: transparent; /* Fundo transparente para o wrapper */
     }
 
     .logo-container {
@@ -182,34 +225,73 @@ body {
     }
 
     .login-logo {
-        max-width: 220px;
+        max-width: 220px; /* Reduz o tamanho do logo */
     }
 
     .login-container {
-        width: 100%;
-        max-width: 380px;
-        padding: 30px;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        width: 100%; /* Garante que ocupe a largura total disponível */
+        max-width: 380px; /* Limita a largura em telas maiores que mobile */
+        padding: 30px; /* Reduz o padding para telas menores */
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); /* Adiciona uma sombra de volta para o container */
+        border: 1px solid var(--pe-medium-blue); /* Mantém a borda do container */
     }
 
     .form-title {
-        font-size: 2rem;
+        font-size: 2rem; /* Reduz o tamanho do título */
+    }
+
+    .form-subtitle {
+        margin-bottom: 25px; /* Ajusta o espaçamento */
+    }
+
+    .input-group {
+        margin-bottom: 20px; /* Reduz ligeiramente o espaçamento entre inputs */
+    }
+
+    .input-label {
+        margin-bottom: 8px; /* Ajusta o espaçamento */
+    }
+
+    .form-input {
+        padding: 12px 15px; /* Reduz um pouco o padding dos inputs */
     }
 
     .btn-pernambuco {
         padding: 14px 25px;
         font-size: 1.1rem;
+        margin-top: 25px; /* Ajusta o espaçamento antes do botão */
+        margin-bottom: 15px; /* Ajusta o espaçamento depois do botão */
+    }
+
+    .forgot-password {
+        margin-top: 15px; /* Ajusta o espaçamento */
+    }
+
+    .validation-message {
+        padding: 6px 10px; /* Reduz o padding da mensagem de validação */
+        font-size: 0.8rem; /* Reduz o tamanho da fonte */
     }
 }
 
 @media (max-width: 576px) {
     body {
-        padding: 15px;
+        padding: 15px; /* Padding menor no body para telas muito pequenas */
     }
     .login-container {
-        padding: 25px;
+        padding: 25px; /* Padding ainda menor no container de login */
     }
     .form-title {
-        font-size: 1.8rem;
+        font-size: 1.8rem; /* Título ainda menor */
+    }
+    .input-group {
+        margin-bottom: 18px; /* Espaçamento menor entre inputs */
+    }
+    .btn-pernambuco {
+        padding: 12px 20px;
+        font-size: 1rem;
+        margin-top: 20px;
+    }
+    .forgot-password {
+        font-size: 0.9rem;
     }
 }
