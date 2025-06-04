@@ -13,22 +13,47 @@
         <img src="img/logo%20jornal%201.jpg" alt="Logo do Jornal Notícias PE" class="login-logo">
     </div>
     <div class="login-container card-shadow">
-        <form class="login-form">
+        <form class="login-form" method="POST">
             <h2 class="form-title">Faça seu Login!</h2>
             <p class="form-subtitle">Acesse sua conta para interagir e acompanhar as notícias.</p>
+
             <div class="input-group">
                 <label for="username" class="input-label">Usuário:</label>
-                <input type="text" id="username" name="username" placeholder="Digite seu nome de usuário" required class="form-input">
+                <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        placeholder="Digite seu nome de usuário"
+                        required
+                        minlength="3"
+                        maxlength="20"
+                        pattern="^[a-zA-Z0-9_.-]+$"
+                        title="Use apenas letras, números, ponto, hífen ou underline (3 a 20 caracteres)"
+                        class="form-input"
+                >
             </div>
+
             <div class="input-group">
                 <label for="password" class="input-label">Senha:</label>
-                <input type="password" id="password" name="password" placeholder="Digite sua senha" required class="form-input">
+                <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Digite sua senha"
+                        required
+                        minlength="6"
+                        class="form-input"
+                        title="A senha deve conter pelo menos 6 caracteres"
+                >
             </div>
-            <button type="submit" class="login-button btn-pernambuco">Entrar</button>
+
+            <button type="submit" class="login-button btn-pernambuco" id="login-button">Entrar</button>
+
             <p class="forgot-password">
                 <a href="URL_DA_SUA_PAGINA_DE_RECUPERACAO" target="_blank">Esqueceu a senha?</a>
             </p>
-            <p id="error-message" class="error-message"></p>
+
+            <p id="error-message" class="error-message" style="color: red; margin-top: 10px; display: none;"></p>
         </form>
     </div>
 </div>

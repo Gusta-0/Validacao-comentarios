@@ -66,7 +66,7 @@ document.getElementById("comentarioForm").addEventListener("submit", async (e) =
             } catch {
                 if (responseBody) erroMensagem = responseBody;
             }
-            throw new Error(erroMensagem);
+            throw { message: erroMensagem };
         }
 
         const data = await response.json();
@@ -191,9 +191,11 @@ async function carregarComentarios() {
         }
 
     } catch (error) {
-        console.error("Erro ao carregar comentários:", error);
+        const mensagemErroLimpa = error?.message || error;
         document.getElementById("mensagem").innerHTML = `
-            <div class="alert alert-danger">Erro ao carregar comentários: ${error.message}</div>
-        `;
+        <div class="alert alert-danger">${mensagemErroLimpa}</div>
+    `;
+        console.error("Erro completo:", error);
     }
+
 }
